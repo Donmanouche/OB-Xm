@@ -30,6 +30,4 @@ CXXFLAGS += -Wno-deprecated
 panels:
 	python3 tools/gen_panels.py
 
-# Offline DSP tests: `make -C tests` (does not need RACK_DIR)
-
 .PHONY: panels

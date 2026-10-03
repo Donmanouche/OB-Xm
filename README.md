@@ -10,8 +10,9 @@ Synth Team's continuation of OB-Xd (originally by Vadim Filatov / discoDSP):
 The oscillator, filter and envelope code is OB-Xf's own (commit
 [`b08ffb6`](https://github.com/surge-synthesizer/OB-Xf/commit/b08ffb6ab6cfa0f66cb057e855149ab640de0f78)),
 vendored unmodified in [`thirdparty/obxf/`](thirdparty/obxf/PROVENANCE.md). The
-per-voice glue of OB-Xf's `Voice.h` is re-written in `src/dsp/`, and the tests
-check that oscillator → filter reproduces OB-Xf's `Voice::ProcessSample()`.
+per-voice glue of OB-Xf's `Voice.h` is re-written in `src/dsp/`; during development,
+oscillator → filter was checked against OB-Xf's own `Voice::ProcessSample()` and
+the OB-Xf plug-in (offline A/B renders, within float rounding for a single voice).
 
 This project is not affiliated with the Surge Synth Team.
 
@@ -118,8 +119,7 @@ Outputs: **OUT** (polyphonic audio) and **ENV** (the velocity-scaled envelope,
 | Unison voices per channel | 8 | 4, and channels × unison ≤ 8 (the unison count is reduced automatically above that) |
 | HQ (2× oversampling) | menu option | not available |
 
-Measured on a Ryzen 5 5500U, one channel, % of one core
-(`make -C tests && tests/build/obxf_tests bench`):
+Measured on a Ryzen 5 5500U, one channel, % of one core:
 
 | | normal | HQ |
 |---|---|---|
@@ -135,7 +135,7 @@ HQ changes (never per sample).
 
 - **Unison and the filter**: OB-Xf runs one filter per unison voice; here the
   unison voices of a channel are summed and filtered once (–70 dB difference in
-  the tests at moderate resonance, more as the filter saturates).
+  A/B renders at moderate resonance, more as the filter saturates).
 - **HQ**: OB-Xf oversamples the whole voice; here the oscillator and the filter
   each oversample and decimate, and the filter upsamples its input by linear
   interpolation. HQ adds about 9 samples of latency (–38 dB difference).
@@ -202,22 +202,6 @@ prelink otherwise breaks inline functions shared with the host, such as
 OB-Xf's VectorTheme assets) and `src/PanelLayout.hpp` (control positions used
 by the C++). Run `make panels`, then `metamodule/make_assets.sh`.
 
-### Tests
-
-```bash
-git clone --depth 1 https://github.com/surge-synthesizer/OB-Xf thirdparty-src/OB-Xf
-cd thirdparty-src/OB-Xf && git fetch --depth 1 origin b08ffb6ab6cfa0f66cb057e855149ab640de0f78 && git checkout FETCH_HEAD && cd -
-make -C tests
-```
-
-`tests/` compiles OB-Xf's original `Voice.h`, `Lfo.h` and `Tuning.h` (with tiny
-JUCE / MTS-ESP stand-ins in `tests/stubs/`) and compares a full note — attack,
-sustain, release — rendered by OB-Xf and by OBXm Oscillator → OBXm Filter, for
-saw / pulse / sync / cross-mod / ring / noise patches and all filter types. It
-also checks aliasing, levels and the Xpander mode mapping, and writes WAV files
-to `tests/out/`. `obxf_tests explore` and `obxf_tests bench` give extra
-diagnostics and CPU figures.
-
 ## Layout
 
 - `src/` — the two modules, UI components, generated `PanelLayout.hpp`
@@ -226,7 +210,6 @@ diagnostics and CPU figures.
 - `res/` — faceplates and components (generated)
 - `metamodule/` — MetaModule build: CMake, `plugin-mm.json`, PNG assets
 - `tools/` — panel generator
-- `tests/` — offline A/B tests against OB-Xf
 
 ## License
 

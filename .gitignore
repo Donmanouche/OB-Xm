@@ -11,9 +11,7 @@ plugin.dll
 # MetaModule build
 metamodule/build/
 metamodule/build_config.log
-# Tests
-tests/build/
-tests/out/
 compile_commands.json
 metamodule/metamodule-plugins/
-tests/vst3_render/obxf_render
+# Offline test tools (kept local, not published)
+tests/
