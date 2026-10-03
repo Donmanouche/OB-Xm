@@ -7,12 +7,6 @@ Synth Team's continuation of OB-Xd (originally by Vadim Filatov / discoDSP):
 - **OBXm Oscillator** — OB-Xf's two oscillators, mixer, unison and detune.
 - **OBXm Filter** — OB-Xf's multimode filter with its filter envelope.
 
-The oscillator, filter and envelope code is OB-Xf's own (commit
-[`b08ffb6`](https://github.com/surge-synthesizer/OB-Xf/commit/b08ffb6ab6cfa0f66cb057e855149ab640de0f78)),
-vendored unmodified in `thirdparty/obxf/engine/`. The
-per-voice glue of OB-Xf's `Voice.h` is re-written in `src/dsp/`; during development,
-oscillator → filter was checked against OB-Xf's own `Voice::ProcessSample()` and
-the OB-Xf plug-in (offline A/B renders, within float rounding for a single voice).
 
 This project is not affiliated with the Surge Synth Team.
 
