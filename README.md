@@ -9,7 +9,7 @@ Synth Team's continuation of OB-Xd (originally by Vadim Filatov / discoDSP):
 
 The oscillator, filter and envelope code is OB-Xf's own (commit
 [`b08ffb6`](https://github.com/surge-synthesizer/OB-Xf/commit/b08ffb6ab6cfa0f66cb057e855149ab640de0f78)),
-vendored unmodified in [`thirdparty/obxf/`](thirdparty/obxf/PROVENANCE.md). The
+vendored unmodified in `thirdparty/obxf/engine/`. The
 per-voice glue of OB-Xf's `Voice.h` is re-written in `src/dsp/`; during development,
 oscillator → filter was checked against OB-Xf's own `Voice::ProcessSample()` and
 the OB-Xf plug-in (offline A/B renders, within float rounding for a single voice).
@@ -142,9 +142,6 @@ HQ changes (never per sample).
 - **Envelope source**: ENV TO PITCH / PW take an external envelope instead of
   OB-Xf's internal filter envelope (patch the filter's ENV output to get the
   OB-Xf routing, one sample later).
-- **Not included**: LFOs, amp envelope, glide (use a slew limiter on V/OCT; OB-Xf's
-  fixed 250 Hz pitch smoothing is kept), pitch bend, vibrato, pan spread,
-  voice-variation controls (fixed at OB-Xf's defaults, 25 %).
 - **Panel**: colours, knobs, buttons, sliders and displays follow OB-Xf's
   default VectorTheme; the OB-Xf logo itself is not reproduced (plain text).
 
@@ -169,7 +166,6 @@ clone it next to this repository (`../metamodule-plugin-sdk`) or point
 
 ```bash
 cd metamodule
-./make_assets.sh   # res/*.svg -> assets/*.png (Inkscape 1.2)
 cmake --fresh -B build -G Ninja -DTOOLCHAIN_BASE_DIR=/path/to/arm-toolchain/bin
 cmake --build build
 ```
@@ -195,21 +191,13 @@ prelink otherwise breaks inline functions shared with the host, such as
 `std::to_string`). Patches use the slugs `OB-Xm:OBXmOscillator` and
 `OB-Xm:OBXmFilter`.
 
-### Panels
-
-`tools/gen_panels.py` (needs Inkscape) generates the faceplates `res/*.svg`
-(text converted to paths), the components `res/components/*.svg` (cut from
-OB-Xf's VectorTheme assets) and `src/PanelLayout.hpp` (control positions used
-by the C++). Run `make panels`, then `metamodule/make_assets.sh`.
-
 ## Layout
 
 - `src/` — the two modules, UI components, generated `PanelLayout.hpp`
 - `src/dsp/` — oscillator and filter engines (no Rack dependency)
-- `thirdparty/obxf/` — OB-Xf DSP headers (unmodified), JUCE shim, assets, provenance
-- `res/` — faceplates and components (generated)
+- `thirdparty/obxf/` — OB-Xf DSP headers (`engine/`, unmodified) and the JUCE shim (`shim/`)
+- `res/` — faceplates and components
 - `metamodule/` — MetaModule build: CMake, `plugin-mm.json`, PNG assets
-- `tools/` — panel generator
 
 ## License
 

@@ -9,7 +9,7 @@
   "pluginUrl": "https://github.com/Donmanouche/OB-Xm",
   "manualUrl": "https://github.com/Donmanouche/OB-Xm#readme",
   "sourceUrl": "https://github.com/Donmanouche/OB-Xm",
-  "changelogUrl": "https://github.com/Donmanouche/OB-Xm/blob/main/CHANGELOG.md",
+  "changelogUrl": "https://github.com/Donmanouche/OB-Xm/releases",
   "modules": [
     {
       "slug": "OBXmOscillator",
