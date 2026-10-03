@@ -1,0 +1,18 @@
+{
+	"MetaModuleBrandName": "OB-Xm",
+	"MetaModulePluginMaintainer": "Donmanouche",
+	"MetaModuleDescription": "Port of the oscillators and filter of OB-Xf (Surge Synth Team, GPL-3.0) as two polyphonic modules. On MetaModule: up to 4 voices per cable, and channels x unison voices limited to 8.",
+	"MetaModuleIncludedModules": [
+		{
+			"slug": "OBXmOscillator",
+			"name": "OBXm Oscillator",
+			"displayName": "OBXm Oscillator"
+		},
+		{
+			"slug": "OBXmFilter",
+			"name": "OBXm Filter",
+			"displayName": "OBXm Filter"
+		}
+	],
+	"MetaModulePluginMaintainerUrl": "https://github.com/Donmanouche/OB-Xm"
+}

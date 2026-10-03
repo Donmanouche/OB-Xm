@@ -1,0 +1,19 @@
+# Upstream OB-Xf checkout used for reference / tests (not part of the plugin)
+thirdparty-src/
+# VCV Rack build
+build/
+dist/
+plugin.so
+plugin.dylib
+plugin.dll
+*.o
+*.d
+# MetaModule build
+metamodule/build/
+metamodule/build_config.log
+# Tests
+tests/build/
+tests/out/
+compile_commands.json
+metamodule/metamodule-plugins/
+tests/vst3_render/obxf_render

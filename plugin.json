@@ -1,0 +1,35 @@
+{
+  "slug": "OB-Xm",
+  "name": "OB-Xm",
+  "version": "2.0.1",
+  "license": "GPL-3.0-or-later",
+  "brand": "OB-Xm",
+  "author": "Donmanouche",
+  "authorEmail": "",
+  "pluginUrl": "https://github.com/Donmanouche/OB-Xm",
+  "manualUrl": "https://github.com/Donmanouche/OB-Xm#readme",
+  "sourceUrl": "https://github.com/Donmanouche/OB-Xm",
+  "changelogUrl": "https://github.com/Donmanouche/OB-Xm/blob/main/CHANGELOG.md",
+  "modules": [
+    {
+      "slug": "OBXmOscillator",
+      "name": "OBXm Oscillator",
+      "description": "The two oscillators of OB-Xf (Surge Synth Team's continuation of OB-Xd), with its mixer, cross-modulation, hard sync, unison and detune. Same DSP code as OB-Xf.",
+      "tags": [
+        "Oscillator",
+        "Polyphonic"
+      ]
+    },
+    {
+      "slug": "OBXmFilter",
+      "name": "OBXm Filter",
+      "description": "The OB-Xf multimode filter (2-pole, 4-pole and 15 Xpander modes) with its filter envelope, curve and velocity. Same DSP code as OB-Xf.",
+      "tags": [
+        "Filter",
+        "Envelope generator",
+        "Polyphonic"
+      ]
+    }
+  ],
+  "description": "OB-Xm: oscillator and filter modules for VCV Rack and the 4ms MetaModule, built from the GPL-3.0 DSP code of OB-Xf (https://github.com/surge-synthesizer/OB-Xf). Not affiliated with the Surge Synth Team."
+}
