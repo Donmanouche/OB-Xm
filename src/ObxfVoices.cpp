@@ -47,7 +47,7 @@ struct PanQuantity : ParamQuantity
 };
 } // namespace
 
-struct ObxfVoices : Module
+struct ObxfVoices : ObxmModule
 {
     // Ids are shared by the 8-pan (Rack) and 4-pan (MetaModule) builds: the first ones match.
     enum ParamId
@@ -119,19 +119,19 @@ struct ObxfVoices : Module
     }
 };
 
-struct ObxfVoicesWidget : ModuleWidget
+struct ObxfVoicesWidget : ObxmModuleWidget
 {
     ObxfVoicesWidget(ObxfVoices *module)
     {
         using namespace obxfui;
 #ifdef METAMODULE
         namespace L = layout::voices4;
-        setPanel(createPanel(asset::plugin(pluginInstance, "res/ObxfVoices4.svg")));
+        setThemedPanel("ObxfVoices4");
         const layout::Mm pans[NUM_PANS] = {L::PAN_1, L::PAN_2, L::PAN_3, L::PAN_4};
         const layout::Mm cvs[NUM_PANS] = {L::PAN_CV_1, L::PAN_CV_2, L::PAN_CV_3, L::PAN_CV_4};
 #else
         namespace L = layout::voices;
-        setPanel(createPanel(asset::plugin(pluginInstance, "res/ObxfVoices.svg")));
+        setThemedPanel("ObxfVoices");
         const layout::Mm pans[NUM_PANS] = {L::PAN_1, L::PAN_2, L::PAN_3, L::PAN_4,
                                            L::PAN_5, L::PAN_6, L::PAN_7, L::PAN_8};
         const layout::Mm cvs[NUM_PANS] = {L::PAN_CV_1, L::PAN_CV_2, L::PAN_CV_3, L::PAN_CV_4,

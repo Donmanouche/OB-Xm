@@ -42,7 +42,7 @@ struct UnisonVoicesQuantity : ParamQuantity
 
 } // namespace
 
-struct ObxfOscillator : Module
+struct ObxfOscillator : ObxmModule
 {
     enum ParamId
     {
@@ -285,7 +285,7 @@ struct ObxfOscillator : Module
 
     json_t *dataToJson() override
     {
-        json_t *root = json_object();
+        json_t *root = ObxmModule::dataToJson();
         json_object_set_new(root, "hq", json_boolean(hq));
         json_object_set_new(root, "snapPitch", json_boolean(snapPitch));
         return root;
@@ -293,6 +293,7 @@ struct ObxfOscillator : Module
 
     void dataFromJson(json_t *root) override
     {
+        ObxmModule::dataFromJson(root);
         if (json_t *j = json_object_get(root, "hq"))
             hq = json_boolean_value(j);
         if (json_t *j = json_object_get(root, "snapPitch"))
@@ -311,14 +312,14 @@ struct VoicesDisplay : obxfui::SevenSegmentDisplay
     }
 };
 
-struct ObxfOscillatorWidget : ModuleWidget
+struct ObxfOscillatorWidget : ObxmModuleWidget
 {
     ObxfOscillatorWidget(ObxfOscillator *module)
     {
         using namespace obxfui;
         namespace L = layout::osc;
         setModule(module);
-        setPanel(createPanel(asset::plugin(pluginInstance, "res/ObxfOsc.svg")));
+        setThemedPanel("ObxfOsc");
 
         addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, 0)));
         addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
@@ -395,12 +396,13 @@ struct ObxfOscillatorWidget : ModuleWidget
                 module->applyPitchSnap();
             }));
 #ifndef METAMODULE
-        menu->addChild(createBoolPtrMenuItem("HQ (2x oversampling, as in OB-Xf)", "", &module->hq));
+        menu->addChild(createBoolPtrMenuItem("HQ (2x oversampling)", "", &module->hq));
 #endif
         menu->addChild(createMenuLabel(string::f("Unison: up to %d voices per channel", MAX_UNISON)));
 #ifdef METAMODULE
         menu->addChild(createMenuLabel(string::f("MetaModule: channels x unison <= %d", MAX_OSC_BLOCKS)));
 #endif
+        appendThemeMenu(menu);
     }
 };
 

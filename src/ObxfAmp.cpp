@@ -43,7 +43,7 @@ using DecayQuantity = AmpTimeQuantity<AmpEngine::decayMs, 4>;
 using ReleaseQuantity = AmpTimeQuantity<AmpEngine::releaseMs, 8>;
 } // namespace
 
-struct ObxfAmp : Module
+struct ObxfAmp : ObxmModule
 {
     enum ParamId
     {
@@ -168,14 +168,14 @@ struct ObxfAmp : Module
     }
 };
 
-struct ObxfAmpWidget : ModuleWidget
+struct ObxfAmpWidget : ObxmModuleWidget
 {
     ObxfAmpWidget(ObxfAmp *module)
     {
         using namespace obxfui;
         namespace L = layout::amp;
         setModule(module);
-        setPanel(createPanel(asset::plugin(pluginInstance, "res/ObxfAmp.svg")));
+        setThemedPanel("ObxfAmp");
 
         addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, 0)));
         addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));

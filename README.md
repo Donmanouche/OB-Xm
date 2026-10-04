@@ -21,9 +21,19 @@ This project is not affiliated with the Surge Synth Team.
 | **OBXm Amplifier** (12 HP) | <img src="docs/images/vcv-amplifier.png" width="200"> | <img src="docs/images/mm-amplifier.png" width="320"> |
 | **OBXm Voice Variation** (12 HP) | <img src="docs/images/vcv-voices.png" width="200"> | <img src="docs/images/mm-voices.png" width="320"> |
 
-Oscillator and Filter on the MetaModule (patch view):
+**Panel styles** (VCV Rack): every module has two faceplates, chosen in its context
+menu under *Panel style*: **OB-Xf Light** (default, above), inspired by OB-Xf's light
+skin, and **OB-8 Noir**, inspired by the Oberheim OB-X / OB-Xa / OB-8 hardware. The
+choice is saved with the patch; the last style chosen becomes the default for new
+modules, and *Apply to all OB-Xm modules* switches the whole patch. The MetaModule
+uses OB-Xf Light.
 
-<img src="docs/images/mm-patch.png" width="480">
+<img src="docs/images/vcv-noir.png" width="700">
+
+The full chain on the MetaModule (patch view): Oscillator → Filter → Amplifier →
+Voice Variation.
+
+<img src="docs/images/mm-patch.png" width="400">
 
 ## Installation
 

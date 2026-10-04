@@ -2,7 +2,8 @@
  * OB-Xm — panel components in OB-Xf's VectorTheme style.
  *
  * The SVGs in res/components/ are cut from OB-Xf's assets/binary/VectorTheme
- * (GPL-3.0-or-later) by tools/gen_panels.py.
+ * (GPL-3.0-or-later) by tools/gen_panels.py; the "_Noir" ones (panel style B) are
+ * drawn by it.
  *
  * Copyright (C) 2026 OB-Xm contributors.
  * Released under the GNU General Public Licence v3 or later (GPL-3.0-or-later).
@@ -13,6 +14,7 @@
 #include "PanelLayout.hpp"
 
 #include <string>
+#include <vector>
 
 namespace obxfui
 {
@@ -24,10 +26,22 @@ inline std::shared_ptr<window::Svg> svg(const char *name)
 
 inline math::Vec mm(layout::Mm p) { return mm2px(math::Vec(p.x, p.y)); }
 
+// File suffix of a panel style's art
+inline const char *themeSuffix(int theme) { return theme == THEME_NOIR ? "_Noir" : ""; }
+
+// A component whose art follows the panel style (set by ObxmModuleWidget)
+struct Themed
+{
+    virtual ~Themed() = default;
+    virtual void setTheme(int theme) = 0;
+};
+
 /* OB-Xf knob: static body (layer 1) under a rotating cap with pointer (layer 2).
  * The MetaModule draws a knob as one rotating image, so it gets both layers merged. */
-template <bool Small> struct ObxfKnobBase : app::SvgKnob
+template <bool Small> struct ObxfKnobBase : app::SvgKnob, Themed
 {
+    widget::SvgWidget *bg = nullptr;
+
     ObxfKnobBase()
     {
         // JUCE rotary default used by OB-Xf: 1.2 pi .. 2.8 pi
@@ -36,12 +50,22 @@ template <bool Small> struct ObxfKnobBase : app::SvgKnob
 #ifdef METAMODULE
         setSvg(svg(Small ? "Trim.svg" : "Knob.svg"));
 #else
-        auto *bg = new widget::SvgWidget;
+        bg = new widget::SvgWidget;
         fb->addChildBelow(bg, tw);
         bg->setSvg(svg(Small ? "Trim_bg.svg" : "Knob_bg.svg"));
         setSvg(svg(Small ? "Trim_fg.svg" : "Knob_fg.svg"));
 #endif
         shadow->opacity = 0.f; // the OB-Xf art has its own shading
+    }
+
+    void setTheme(int theme) override
+    {
+        if (!bg)
+            return;
+        const std::string base = std::string(Small ? "Trim" : "Knob") + themeSuffix(theme);
+        bg->setSvg(svg((base + "_bg.svg").c_str()));
+        setSvg(svg((base + "_fg.svg").c_str()));
+        fb->setDirty();
     }
 };
 using ObxfKnob = ObxfKnobBase<false>;
@@ -52,29 +76,50 @@ struct ObxfSnapKnob : ObxfKnob
     ObxfSnapKnob() { snap = true; }
 };
 
-// Large latching button with LED (oscillator waves, SYNC, XPANDER)
-struct ObxfButton : app::SvgSwitch
+/* Switch whose frames are res/components/<name><style suffix>_<i>.svg; `art` lists the
+ * file index of each frame. */
+struct ObxfThemedSwitch : app::SvgSwitch, Themed
 {
-    ObxfButton()
+    std::string name;
+    std::vector<int> art;
+
+    void initFrames(const char *n, std::initializer_list<int> files)
     {
-        addFrame(svg("Button_0.svg"));
-        addFrame(svg("Button_1.svg"));
+        name = n;
+        art = files;
+        for (int i : art)
+            addFrame(svg((name + "_" + std::to_string(i) + ".svg").c_str()));
         shadow->opacity = 0.f;
     }
+
+    void setTheme(int theme) override
+    {
+        frames.clear();
+        for (int i : art)
+            frames.push_back(
+                svg((name + themeSuffix(theme) + "_" + std::to_string(i) + ".svg").c_str()));
+        int index = 0;
+        if (engine::ParamQuantity *pq = getParamQuantity())
+            index = math::clamp((int)std::round(pq->getValue() - pq->getMinValue()), 0,
+                                (int)frames.size() - 1);
+        sw->setSvg(frames[index]);
+        fb->setDirty();
+    }
+};
+
+// Large latching button with LED (oscillator waves, SYNC, XPANDER)
+struct ObxfButton : ObxfThemedSwitch
+{
+    ObxfButton() { initFrames("Button", {0, 1}); }
 };
 
 /* Large button whose LED is a separate light (ObxfButtonLed) driven by the module, so it
  * can show a state the param alone does not know about (waveform chosen by CV). Both
  * frames are the unlit OB-Xf button. A light, unlike a switch frame, also follows the
  * module state on the MetaModule. */
-struct ObxfLedButton : app::SvgSwitch
+struct ObxfLedButton : ObxfThemedSwitch
 {
-    ObxfLedButton()
-    {
-        addFrame(svg("Button_0.svg"));
-        addFrame(svg("Button_0.svg"));
-        shadow->opacity = 0.f;
-    }
+    ObxfLedButton() { initFrames("Button", {0, 0}); }
 };
 
 // The LED of ObxfButton's art (button.svg: r = 3.75 px, #FF0000 / unlit #301010)
@@ -107,30 +152,19 @@ struct ObxfButtonLed : app::ModuleLightWidget
 constexpr float BUTTON_LED_DY = (6.5f - 17.5f) * 9.f / 40.f;
 
 // Slim latching LED button (4-POLE, INVERT, OSC1+2, INV, ...)
-struct ObxfSlimButton : app::SvgSwitch
+struct ObxfSlimButton : ObxfThemedSwitch
 {
-    ObxfSlimButton()
-    {
-        addFrame(svg("Slim_0.svg"));
-        addFrame(svg("Slim_1.svg"));
-        shadow->opacity = 0.f;
-    }
+    ObxfSlimButton() { initFrames("Slim", {0, 1}); }
 };
 
 // Noise colour: white / pink / red, cycles on click
-struct ObxfNoiseButton : app::SvgSwitch
+struct ObxfNoiseButton : ObxfThemedSwitch
 {
-    ObxfNoiseButton()
-    {
-        addFrame(svg("Noise_0.svg"));
-        addFrame(svg("Noise_1.svg"));
-        addFrame(svg("Noise_2.svg"));
-        shadow->opacity = 0.f;
-    }
+    ObxfNoiseButton() { initFrames("Noise", {0, 1, 2}); }
 };
 
 // Horizontal slider (CURVE, VELOCITY)
-struct ObxfSlider : app::SvgSlider
+struct ObxfSlider : app::SvgSlider, Themed
 {
     ObxfSlider()
     {
@@ -141,6 +175,14 @@ struct ObxfSlider : app::SvgSlider
         const float y = (box.size.y - handle->box.size.y) / 2.f;
         setHandlePos(math::Vec(mm2px(pad), y),
                      math::Vec(box.size.x - handle->box.size.x - mm2px(pad), y));
+    }
+
+    void setTheme(int theme) override
+    {
+        const std::string s = themeSuffix(theme);
+        setBackgroundSvg(svg(("SliderTrack" + s + ".svg").c_str()));
+        setHandleSvg(svg(("SliderHandle" + s + ".svg").c_str()));
+        fb->setDirty();
     }
 };
 
@@ -252,6 +294,76 @@ struct SevenSegmentDisplay : widget::TransparentWidget
     }
 };
 
+/* Module widget with the two panel styles: res/<panel>.svg and res/<panel>_Noir.svg.
+ * The MetaModule has no context menu and always shows style A. */
+struct ObxmModuleWidget : app::ModuleWidget
+{
+    std::string panelName;
+    int shownTheme = THEME_LIGHT;
+
+    void setThemedPanel(const std::string &name)
+    {
+        panelName = name;
+        setPanel(createPanel(asset::plugin(pluginInstance, "res/" + name + ".svg")));
+    }
+
+#ifndef METAMODULE
+    int wantedTheme()
+    {
+        auto *m = dynamic_cast<ObxmModule *>(module);
+        return m ? m->panelTheme : defaultPanelTheme;
+    }
+
+    void applyTheme(int theme)
+    {
+        shownTheme = theme;
+        if (auto *p = dynamic_cast<app::SvgPanel *>(getPanel()))
+            p->setBackground(window::Svg::load(
+                asset::plugin(pluginInstance, "res/" + panelName + themeSuffix(theme) + ".svg")));
+        for (widget::Widget *w : children)
+            if (auto *t = dynamic_cast<Themed *>(w))
+                t->setTheme(theme);
+    }
+
+    void step() override
+    {
+        if (wantedTheme() != shownTheme)
+            applyTheme(wantedTheme());
+        app::ModuleWidget::step();
+    }
+
+#endif
+
+    // "Panel style" submenu (VCV Rack only)
+    void appendThemeMenu(ui::Menu *menu)
+    {
+#ifndef METAMODULE
+        auto *m = dynamic_cast<ObxmModule *>(module);
+        if (!m)
+            return;
+        menu->addChild(new ui::MenuSeparator);
+        menu->addChild(createSubmenuItem("Panel style", "", [=](ui::Menu *sub) {
+            static const char *names[] = {"OB-Xf Light", "OB-8 Noir"};
+            for (int i = 0; i < 2; i++)
+                sub->addChild(createCheckMenuItem(
+                    names[i], "", [=]() { return m->panelTheme == i; },
+                    [=]() {
+                        m->panelTheme = i;
+                        defaultPanelTheme = i; // also for the next modules
+                    }));
+            sub->addChild(new ui::MenuSeparator);
+            sub->addChild(createMenuItem("Apply to all OB-Xm modules", "", [=]() {
+                for (app::ModuleWidget *mw : APP->scene->rack->getModules())
+                    if (auto *om = dynamic_cast<ObxmModule *>(mw->module))
+                        om->panelTheme = m->panelTheme;
+            }));
+        }));
+#endif
+    }
+
+    void appendContextMenu(ui::Menu *menu) override { appendThemeMenu(menu); }
+};
+
 inline void placeDisplay(widget::Widget *d, layout::MmBox b)
 {
     d->box.size = mm2px(math::Vec(b.w, b.h));
@@ -259,3 +371,5 @@ inline void placeDisplay(widget::Widget *d, layout::MmBox b)
 }
 
 } // namespace obxfui
+
+using obxfui::ObxmModuleWidget;

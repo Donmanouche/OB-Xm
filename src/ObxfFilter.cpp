@@ -56,7 +56,7 @@ struct ModeQuantity;
 
 } // namespace
 
-struct ObxfFilter : Module
+struct ObxfFilter : ObxmModule
 {
     /* Fixed output gain, applied after the filter (so the filter is driven exactly as in
      * OB-Xf): one saw through an open filter = +-2.5 V. This leaves headroom for
@@ -220,13 +220,14 @@ struct ObxfFilter : Module
 
     json_t *dataToJson() override
     {
-        json_t *root = json_object();
+        json_t *root = ObxmModule::dataToJson();
         json_object_set_new(root, "hq", json_boolean(hq));
         return root;
     }
 
     void dataFromJson(json_t *root) override
     {
+        ObxmModule::dataFromJson(root);
         if (json_t *j = json_object_get(root, "hq"))
             hq = json_boolean_value(j);
     }
@@ -300,14 +301,14 @@ struct ModeDisplay : obxfui::SevenSegmentDisplay
     std::string getText() override { return module ? module->modeName(true) : "L2"; }
 };
 
-struct ObxfFilterWidget : ModuleWidget
+struct ObxfFilterWidget : ObxmModuleWidget
 {
     ObxfFilterWidget(ObxfFilter *module)
     {
         using namespace obxfui;
         namespace L = layout::filter;
         setModule(module);
-        setPanel(createPanel(asset::plugin(pluginInstance, "res/ObxfFilter.svg")));
+        setThemedPanel("ObxfFilter");
 
         addChild(createWidget<ScrewBlack>(Vec(RACK_GRID_WIDTH, 0)));
         addChild(createWidget<ScrewBlack>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
@@ -368,6 +369,7 @@ struct ObxfFilterWidget : ModuleWidget
         menu->addChild(new MenuSeparator);
         menu->addChild(createBoolPtrMenuItem("HQ (2x oversampling)", "", &module->hq));
 #endif
+        appendThemeMenu(menu);
     }
 };
 

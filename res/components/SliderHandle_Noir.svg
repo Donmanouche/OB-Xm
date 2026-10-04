@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2.0250mm" height="2.0250mm" viewBox="0 0 2.0250 2.0250"><defs><radialGradient id="silver" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#F2F2F2"/><stop offset="0.7" stop-color="#C4C6C9"/><stop offset="1" stop-color="#8E9195"/></radialGradient></defs><rect x="0.08" y="0.08" width="1.865" height="1.865" rx="0.3" fill="url(#silver)" stroke="#2A2A2A" stroke-width="0.12"/><line x1="1.012" y1="0.35" x2="1.012" y2="1.675" stroke="#111" stroke-width="0.22"/></svg>
