@@ -28,6 +28,8 @@ choice is saved with the patch; the last style chosen becomes the default for ne
 modules, and *Apply to all OB-Xm modules* switches the whole patch. The MetaModule
 uses OB-Xf Light.
 
+OB-8 Noir, the full chain: Oscillator → Filter → Amplifier → Voice Variation.
+
 <img src="docs/images/vcv-noir.png" width="700">
 
 The full chain on the MetaModule (patch view): Oscillator → Filter → Amplifier →
