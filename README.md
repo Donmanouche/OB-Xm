@@ -157,26 +157,6 @@ OB-Xf's other Voice Variation controls are not in this module: FILTERS and
 ENVELOPES act inside OBXm Filter (fixed at OB-Xf's default, 25 %), and there is no
 glide in these modules (GLIDE).
 
-## Polyphony and CPU
-
-| | VCV Rack | MetaModule |
-|---|---|---|
-| Channels per module | 16 | 4 (SDK `PORT_MAX_CHANNELS`) |
-| Unison voices per channel | 8 | 4, and channels × unison ≤ 8 (the unison count is reduced automatically above that) |
-| HQ (2× oversampling) | menu option | not available |
-
-Measured on a Ryzen 5 5500U, one channel, % of one core:
-
-| | normal | HQ |
-|---|---|---|
-| Oscillator, unison 1 | 0.27 % | 0.63 % |
-| Oscillator, unison 8 | 2.3 % | 4.1 % |
-| Filter, 2-pole / 4-pole | 0.41 / 0.52 % | 0.70 / 0.96 % |
-
-There is no memory allocation and no lock in the audio thread. OB-Xf's
-`OscillatorBlock` calls `std::rand()` to seed its slop when the sample rate or
-HQ changes (never per sample).
-
 ## Differences from OB-Xf
 
 - **Unison and the filter**: OB-Xf runs one filter per unison voice; here the
