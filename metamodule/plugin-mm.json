@@ -12,6 +12,16 @@
 			"slug": "OBXmFilter",
 			"name": "OBXm Filter",
 			"displayName": "OBXm Filter"
+		},
+		{
+			"slug": "OBXmAmplifier",
+			"name": "OBXm Amplifier",
+			"displayName": "OBXm Amplifier"
+		},
+		{
+			"slug": "OBXmVoices",
+			"name": "OBXm Voice Variation",
+			"displayName": "OBXm Voice Variation"
 		}
 	],
 	"MetaModulePluginMaintainerUrl": "https://github.com/Donmanouche/OB-Xm"

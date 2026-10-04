@@ -14,3 +14,5 @@ extern Plugin *pluginInstance;
 
 extern Model *modelObxfOscillator;
 extern Model *modelObxfFilter;
+extern Model *modelObxfVoices;
+extern Model *modelObxfAmp;

@@ -98,6 +98,72 @@ constexpr Mm OUT_OUTPUT = {75.500f, 112.000f};
 constexpr Mm ENV_OUTPUT = {89.500f, 112.000f};
 } // namespace filter
 
+namespace voices
+{
+constexpr int HP = 12;
+constexpr Mm LEVELS = {30.480f, 17.500f};
+constexpr Mm PAN_1 = {9.030f, 36.000f};
+constexpr Mm PAN_2 = {23.330f, 36.000f};
+constexpr Mm PAN_3 = {37.630f, 36.000f};
+constexpr Mm PAN_4 = {51.930f, 36.000f};
+constexpr Mm PAN_5 = {9.030f, 51.500f};
+constexpr Mm PAN_6 = {23.330f, 51.500f};
+constexpr Mm PAN_7 = {37.630f, 51.500f};
+constexpr Mm PAN_8 = {51.930f, 51.500f};
+constexpr Mm PAN_CV_1 = {9.030f, 78.000f};
+constexpr Mm PAN_CV_2 = {23.330f, 78.000f};
+constexpr Mm PAN_CV_3 = {37.630f, 78.000f};
+constexpr Mm PAN_CV_4 = {51.930f, 78.000f};
+constexpr Mm PAN_CV_5 = {9.030f, 93.000f};
+constexpr Mm PAN_CV_6 = {23.330f, 93.000f};
+constexpr Mm PAN_CV_7 = {37.630f, 93.000f};
+constexpr Mm PAN_CV_8 = {51.930f, 93.000f};
+constexpr Mm IN_INPUT = {12.000f, 113.500f};
+constexpr Mm L_OUTPUT = {37.000f, 113.500f};
+constexpr Mm R_OUTPUT = {50.500f, 113.500f};
+} // namespace voices
+
+namespace voices4
+{
+constexpr int HP = 12;
+constexpr Mm LEVELS = {30.480f, 17.500f};
+constexpr Mm PAN_1 = {9.030f, 36.000f};
+constexpr Mm PAN_2 = {23.330f, 36.000f};
+constexpr Mm PAN_3 = {37.630f, 36.000f};
+constexpr Mm PAN_4 = {51.930f, 36.000f};
+constexpr Mm PAN_CV_1 = {9.030f, 62.500f};
+constexpr Mm PAN_CV_2 = {23.330f, 62.500f};
+constexpr Mm PAN_CV_3 = {37.630f, 62.500f};
+constexpr Mm PAN_CV_4 = {51.930f, 62.500f};
+constexpr Mm IN_INPUT = {12.000f, 113.500f};
+constexpr Mm L_OUTPUT = {37.000f, 113.500f};
+constexpr Mm R_OUTPUT = {50.500f, 113.500f};
+} // namespace voices4
+
+namespace amp
+{
+constexpr int HP = 12;
+constexpr Mm ATTACK = {10.230f, 18.500f};
+constexpr Mm DECAY = {23.730f, 18.500f};
+constexpr Mm SUSTAIN = {37.230f, 18.500f};
+constexpr Mm RELEASE = {50.730f, 18.500f};
+constexpr Mm CURVE = {16.980f, 32.000f};
+constexpr Mm VELOCITY = {43.980f, 32.000f};
+constexpr Mm ATTACK_ATT = {10.230f, 56.500f};
+constexpr Mm ATTACK_INPUT = {10.230f, 71.000f};
+constexpr Mm DECAY_ATT = {23.730f, 56.500f};
+constexpr Mm DECAY_INPUT = {23.730f, 71.000f};
+constexpr Mm SUSTAIN_ATT = {37.230f, 56.500f};
+constexpr Mm SUSTAIN_INPUT = {37.230f, 71.000f};
+constexpr Mm RELEASE_ATT = {50.730f, 56.500f};
+constexpr Mm RELEASE_INPUT = {50.730f, 71.000f};
+constexpr Mm IN_INPUT = {9.000f, 111.000f};
+constexpr Mm GATE_INPUT = {20.500f, 111.000f};
+constexpr Mm VEL_INPUT = {32.000f, 111.000f};
+constexpr Mm OUT_OUTPUT = {43.500f, 111.000f};
+constexpr Mm ENV_OUTPUT = {53.500f, 111.000f};
+} // namespace amp
+
 // Component geometry (mm)
 constexpr float SLIDER_W = 10.5750f;
 constexpr float HANDLE_W = 2.0250f;

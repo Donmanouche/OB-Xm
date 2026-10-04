@@ -16,7 +16,7 @@ endif()
 include(${METAMODULE_SDK_DIR}/plugin.cmake)
 
 project(ObXmMetaModulePlugin
-    DESCRIPTION "OB-Xm (OBXm Oscillator, OBXm Filter) for MetaModule"
+    DESCRIPTION "OB-Xm (OBXm Oscillator, Filter, Amplifier, Voice Variation) for MetaModule"
     LANGUAGES   C CXX ASM
 )
 
@@ -31,6 +31,8 @@ target_sources(ObXm
     ${PLUGIN_ROOT}/src/plugin.cpp
     ${PLUGIN_ROOT}/src/ObxfOscillator.cpp
     ${PLUGIN_ROOT}/src/ObxfFilter.cpp
+    ${PLUGIN_ROOT}/src/ObxfVoices.cpp
+    ${PLUGIN_ROOT}/src/ObxfAmp.cpp
 )
 
 target_include_directories(ObXm PRIVATE

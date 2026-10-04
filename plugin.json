@@ -29,6 +29,27 @@
         "Envelope generator",
         "Polyphonic"
       ]
+    },
+    {
+      "slug": "OBXmAmplifier",
+      "name": "OBXm Amplifier",
+      "description": "The amplifier envelope of OB-Xf (attack curve, velocity, OB-Xf's envelope shapes) with its linear VCA, polyphonic, with CV for attack, decay, sustain and release and an envelope output.",
+      "tags": [
+        "Voltage-controlled amplifier",
+        "Envelope generator",
+        "Polyphonic"
+      ]
+    },
+    {
+      "slug": "OBXmVoices",
+      "name": "OBXm Voice Variation",
+      "description": "The Voice Variation section of OB-Xf: one pan per voice (8 in VCV Rack, 4 on the MetaModule) with CV, and a per-voice level variation. Polyphonic in, stereo out.",
+      "tags": [
+        "Panning",
+        "Mixer",
+        "Polyphonic",
+        "Utility"
+      ]
     }
   ],
   "description": "OB-Xm: oscillator and filter modules for VCV Rack and the 4ms MetaModule, built from the GPL-3.0 DSP code of OB-Xf (https://github.com/surge-synthesizer/OB-Xf). Not affiliated with the Surge Synth Team."

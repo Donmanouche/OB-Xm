@@ -1,11 +1,13 @@
 # OB-Xm
 
-Two polyphonic modules for **VCV Rack 2** and the **4ms MetaModule**, built from
+Polyphonic modules for **VCV Rack 2** and the **4ms MetaModule**, built from
 the DSP code of [**OB-Xf**](https://github.com/surge-synthesizer/OB-Xf), the Surge
 Synth Team's continuation of OB-Xd (originally by Vadim Filatov / discoDSP):
 
 - **OBXm Oscillator** — OB-Xf's two oscillators, mixer, unison and detune.
 - **OBXm Filter** — OB-Xf's multimode filter with its filter envelope.
+- **OBXm Amplifier** — OB-Xf's amplifier envelope and VCA.
+- **OBXm Voice Variation** — OB-Xf's per-voice pan and level variation: polyphonic in, stereo out.
 
 
 This project is not affiliated with the Surge Synth Team.
@@ -16,8 +18,10 @@ This project is not affiliated with the Surge Synth Team.
 |---|---|---|
 | **OBXm Oscillator** (18 HP) | <img src="docs/images/vcv-oscillator.png" width="300"> | <img src="docs/images/mm-oscillator.png" width="320"> |
 | **OBXm Filter** (20 HP) | <img src="docs/images/vcv-filter.png" width="333"> | <img src="docs/images/mm-filter.png" width="320"> |
+| **OBXm Amplifier** (12 HP) | <img src="docs/images/vcv-amplifier.png" width="200"> | <img src="docs/images/mm-amplifier.png" width="320"> |
+| **OBXm Voice Variation** (12 HP) | <img src="docs/images/vcv-voices.png" width="200"> | <img src="docs/images/mm-voices.png" width="320"> |
 
-Both modules on the MetaModule (patch view):
+Oscillator and Filter on the MetaModule (patch view):
 
 <img src="docs/images/mm-patch.png" width="480">
 
@@ -64,12 +68,10 @@ Output: **OUT**, polyphonic, at a fixed level: one saw at full mix is about ±5 
 voices and the two oscillators add up (both at full level: ±10 V, unison: ±25–40 V).
 OBXm Filter applies a fixed output gain after the filter.
 
-**Amp envelope.** OB-Xf's voice ends with an amplifier envelope; these modules do
-not include it. Patch a VCA (linear response, e.g. VCV VCA-1) driven by an ADSR
-after OBXm Filter, otherwise the oscillators keep sounding between notes. OB-Xf's
-own amp envelope has a rounded attack (exponential with overshoot, blendable to
-linear), a sustain capped at 90 %, minimum times of 4 ms (attack) / 8 ms (release)
-and a little per-note timing variation.
+**Amp envelope.** OB-Xf's voice ends with an amplifier envelope: patch
+**OBXm Amplifier** after OBXm Filter (or any VCA driven by an ADSR), otherwise the
+oscillators keep sounding between notes. Suggested chain: Oscillator → Filter →
+Amplifier → Voice Variation.
 
 ## OBXm Filter (20 HP)
 
@@ -104,6 +106,46 @@ Inputs and CV conventions:
 
 Outputs: **OUT** (polyphonic audio) and **ENV** (the velocity-scaled envelope,
 0–10 V; negative when INVERT is on).
+
+## OBXm Amplifier (12 HP)
+
+OB-Xf's amplifier envelope and its linear VCA, one envelope per voice. Its
+character comes from OB-Xf's envelope: a rounded attack (exponential with
+overshoot, blendable to linear), a sustain capped at 90 %, the 32-sample envelope
+delay of OB-Xf's voice and a little per-voice timing variation (25 %, as OB-Xf's
+default ENVELOPES slop).
+
+| Section | Controls |
+|---|---|
+| Amplifier envelope | ATTACK, DECAY (4 ms – 60 s), SUSTAIN, RELEASE (8 ms – 60 s), CURVE (exponential → linear attack), VELOCITY (as in OB-Xf) |
+| CV | attenuverter + input for ATTACK, DECAY, SUSTAIN, RELEASE: added to the knob, 10 V = full range (not in OB-Xf's panel; a new time applies to the running stage, as OB-Xf's modulation matrix does) |
+
+| Input / output | |
+|---|---|
+| IN | audio, polyphonic |
+| GATE | one envelope per channel (Schmitt trigger 0.1 V / 1 V); the polyphony is the larger of the IN and GATE channel counts, so a mono IN can be shaped per voice |
+| VEL | 0–10 V = velocity 0–1, read on the gate's rising edge; 1 when unpatched |
+| OUT | IN × envelope, polyphonic |
+| ENV | the applied envelope, 0–10 V (9 V at full sustain) |
+
+## OBXm Voice Variation (12 HP)
+
+OB-Xf's **Voice Variation** section for a polyphonic patch: it takes the
+polyphonic audio (from OBXm Amplifier, or from the VCA after OBXm Filter) and mixes the voices
+to a stereo pair, as OB-Xf's voice engine does.
+
+| Control | |
+|---|---|
+| PAN 1–8 (1–4 on MetaModule) | pan of each voice, OB-Xf's linear law (left = 1 − pan, right = pan); voice *n* uses pan *n* mod 8, so voices 9–16 reuse pans 1–8 in VCV Rack |
+| PAN CV 1–8 (1–4) | added to the matching pan knob, 10 V = full range (+5 V moves a centred voice fully right) |
+| LEVELS | per-voice level variation (OB-Xf's level slop: gain 1 − 0.67 × LEVELS × a fixed random value per voice). OBXm Oscillator already applies OB-Xf's default 25 %, so this adds to it and defaults to 0 |
+
+Inputs / outputs: **IN** (polyphonic audio), **L** and **R**. Use it instead of a
+mono Sum to bring the voices together.
+
+OB-Xf's other Voice Variation controls are not in this module: FILTERS and
+ENVELOPES act inside OBXm Filter (fixed at OB-Xf's default, 25 %), and there is no
+glide in these modules (GLIDE).
 
 ## Polyphony and CPU
 

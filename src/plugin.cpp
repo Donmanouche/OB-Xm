@@ -13,4 +13,6 @@ void init(Plugin *p)
     pluginInstance = p;
     p->addModel(modelObxfOscillator);
     p->addModel(modelObxfFilter);
+    p->addModel(modelObxfAmp);
+    p->addModel(modelObxfVoices);
 }
